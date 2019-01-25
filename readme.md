@@ -9,8 +9,8 @@
 ## 仕組み
 iot通信モジュールへRS485で取得データを送ります。
 sakura.io + arduino UNO
-sakura.ioから、laravel製のグラフで表示します。（作成中）  
-![シーケンス](sequence.svg "シーケンス図")  
+sakura.ioから、laravel製のグラフで表示します。（これです！）  
+
 
 今後はsigfox,lorawanも利用したいと思います。
 

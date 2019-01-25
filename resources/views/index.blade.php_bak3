@@ -1,0 +1,161 @@
+@extends('layouts.app')
+
+@section('content')
+      <div class="row">
+       <div class="col-md-10 col-md-offset-1">
+		   
+
+{!! Form::open(['class' => 'form-inline','id' => 'prjselectform','name' => 'prjselectform']) !!}
+	<div class="form-group">
+		<!-- <label class="control-label" for="usage1select3">プロジェクト</label> -->
+<?php
+echo '<select  class="form-control form-group-lg" style="height: 34px;" id = "prjid" name="projectid">';
+foreach ($projectatusers as $key => $value) {
+echo "<option ";
+if($key==$projectid){echo "selected='selected' ";}
+echo "value=" .$key. ">";
+echo $value."</option>";
+ }
+echo "</select>";
+?>
+<div id="btntmspan" class="btn-group" data-toggle="buttons">
+	<label class="btn btn-default <?php echo ($timespan==0)?"active":"";?>">
+            <input id = "time-span0" type="radio" name="timespan" autocomplete="off" value="0" <?php echo ($timespan==0)?"checked":"";?> >24時間
+        </label>
+        <label class="btn btn-default  <?php echo ($timespan==1)?"active":"";?>">
+            <input id = "time-span1" type="radio" name="timespan" autocomplete="off"  value="1" <?php echo ($timespan==1)?"checked":"";?> >1週間
+        </label>
+        <label class="btn btn-default  <?php echo ($timespan==2)?"active":"";?>">
+            <input id = "time-span2" type="radio" name="timespan" autocomplete="off"  value="2" <?php echo ($timespan==2)?"checked":"";?> >1カ月
+        </label>
+        <label class="btn btn-default  <?php echo ($timespan==3)?"active":"";?>">
+            <input id = "time-span3" type="radio" name="timespan" autocomplete="off"  value="3" <?php echo ($timespan==3)?"checked":"";?> >3カ月
+        </label>
+        <label class="btn btn-default  <?php echo ($timespan==4)?"active":"";?>">
+            <input id = "time-span4" type="radio" name="timespan" autocomplete="off"  value="4" <?php echo ($timespan==4)?"checked":"";?> >6カ月
+        </label>
+        <label class="btn btn-default  <?php echo ($timespan==5)?"active":"";?>">
+            <input id = "time-span5" type="radio" name="timespan" autocomplete="off"  value="5" <?php echo ($timespan==5)?"checked":"";?> >1年
+        </label>
+</div>
+
+<?php echo Form::submit('Go');?>
+</div>
+                {!! Form::close() !!}
+
+<?php foreach ($sensors as $value) {
+    $i=$value->id;
+    ?>
+           <div class="panel panel-default">
+               <div class="panel-heading" id="chart<?php echo $i; ?>"><b>Chart<?php echo $i; ?></b></div>
+               <div class="panel-body">
+                   <canvas id="canvas<?php echo $i; ?>" height="280" width="600"></canvas>
+               </div>
+           </div>
+<?php } ?>
+       </div>
+     </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/js/bootstrap-select.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js" charset="utf-8"></script>
+        <script>
+            
+            
+ <?php 
+	echo "var timespan = ".$timespan.";";
+	
+    switch ($timespan) {
+    case 0:
+        $from_date=date('Y-m-d');
+        break;
+    case 1:
+        $from_date=date('Y-m-d', strtotime('-1 week', time()));
+        break;
+    case 2:
+        $from_date=date('Y-m-d', strtotime('-1 month', time()));
+        break;
+    case 3:
+        $from_date=date('Y-m-d', strtotime('-3 month', time()));
+        break;
+    case 4:
+        $from_date=date('Y-m-d', strtotime('-6 month', time()));
+        break;
+    case 5:
+        $from_date=date('Y-m-d', strtotime('-1 year', time()));
+        break;
+    }
+
+	$to_date=date('Y-m-d');
+	foreach ($sensors as $value) {
+    $i=$value->id;
+    ?>
+
+
+        $(document).ready(function(){
+			
+            <?php if($timespan == 0){?>var url = "{{url('stock/chart/'.$i)}}";<?php } ?>
+            <?php if($timespan != 0){?>var url = "{{url('stock/chart2/'.$i.'/'.$from_date.'/'.$to_date)}}";<?php } ?>
+
+            var x = new Array();
+            var y = new Array();
+            var items = [];
+            var labelname = '';
+            var titlename = '';
+          $.get(url, function(response){
+            response.forEach(function(data){
+                items.push({x:new Date(data.sddatetime),y:data.sddvalue});
+                labelname = data.name;
+                titlename = data.shieldname + data.unitname;
+            });
+            $('#chart<?php echo $i;?>').html(titlename);
+            var canvas<?php echo $i;?> = document.getElementById("canvas<?php echo $i;?>");
+            var ctx<?php echo $i;?> = canvas<?php echo $i;?>.getContext("2d");
+                var myChart<?php echo $i;?> = new Chart(ctx<?php echo $i;?>, {
+                  type: 'scatter',
+                  data: {
+                      
+                      datasets: [{
+                          label: labelname ,
+                          data: items,
+                          borderWidth: 1,
+                          fill: false,
+                          borderColor: 'rgb(180, 80, 80)',
+                          radius: 0,
+                      }]
+                  },
+options: {
+        scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    unit:  <?php echo ($timespan==0)?"'hour'":"'day'";?>,
+                    displayFormats: {
+                        quarter: <?php echo ($timespan==0)?"'h:mm'":"'YYYY-MM-DD'";?>
+                    }
+                }
+            }]
+        }
+    }
+              });
+          });
+        });
+        
+ <?php } ?>
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+@endsection
+

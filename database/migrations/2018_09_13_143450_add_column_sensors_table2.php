@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnSensorsTable extends Migration
+class AddColumnSensorsTable2 extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,8 @@ class AddColumnSensorsTable extends Migration
     {
         Schema::table('sensors', function (Blueprint $table) {
             //
-			$table->double('limitupper',9,2)->after('ctoffset')->default(0);
-			$table->double('limitunder',9,2)->after('limitupper')->default(0);
-			$table->integer('alertmode')->after('limitunder')->default(0);
+            $table->integer('yscalemax')->default(0)->after('ctgain');
+            $table->integer('yscalemin')->default(0)->after('yscalemax');
         });
     }
 

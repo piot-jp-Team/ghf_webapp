@@ -1,9 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+<?php if(isset($my_message)){ ?>
+
+            <div class="container mt-2">
+                <div class="alert alert-success">
+                    12月6日に発生したSoftBank回線障害により一部のセンサー通信ユニットが通信できない状態になっています。電源の再投入をお願いいたします。<br/>お手数おかけしますが、よろしくお願いいたします。
+                </div>
+            </div>
+<?php }?>
       <div class="row">
        <div class="col-md-10 col-md-offset-1">
-		   
 
 {!! Form::open(['class' => 'form-inline','id' => 'prjselectform','name' => 'prjselectform']) !!}
 {{ csrf_field() }}
@@ -39,7 +46,7 @@ echo "</select>";
             <input id = "time-span5" type="radio" name="timespan" autocomplete="off"  value="5" <?php echo ($timespan==5)?"checked":"";?> >1年
         </label>
 </div>
-
+<?php //var_dump($functiongraphs);?>
 <?php echo Form::submit('表示', ['id' => 'chengebtn']);?>
 </div>
                 {!! Form::close() !!}
@@ -54,20 +61,24 @@ echo "</select>";
                        <canvas id="canvas<?php echo $i; ?>" height="280" width="600"></canvas>
                    </div>
                </div>
-<?php if($i==8){ ?>
+<?php
+foreach ($functiongraphs as $fncg){
+	$pieces = explode("|", $fncg->settingString); //3つめの数字が配置位置の前のセンサーID
+	$beforID=$pieces;
+	if($beforID[2]){
+		if($i==$beforID[2]){ 
+?>
                <div class="panel panel-default container" >
-                   <div class="panel-heading statistics row" id="chart_hs1" ><b>Chart_hs1</b></div>
+                   <div class="panel-heading statistics row" id="chart_hs<?php echo $beforID[2]; ?>" ><b>Chart_hs<?php echo $beforID[2]; ?></b></div>
                    <div class="panel-body">
-                       <canvas id="canvas_hs1" height="280" width="600"></canvas>
+                       <canvas id="canvas_hs<?php echo $beforID[2];?>" height="280" width="600"></canvas>
                    </div>
                </div>
-               <div class="panel panel-default container" >
-                   <div class="panel-heading statistics row" id="chart_hs2" ><b>Chart_hs2</b></div>
-                   <div class="panel-body">
-                       <canvas id="canvas_hs2" height="280" width="600"></canvas>
-                   </div>
-               </div>
-<?php } ?>
+<?php 
+		}
+	}
+} 
+?>
 <!-- <div style='margin-left: auto;width: 400px;'>
 <b> Alert level&nbsp</b><input id="ex<?php echo $i; ?>" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,850]"/> 
 </div>
@@ -207,13 +218,19 @@ var average = function(arr, fn) {
 
 <?php 
 if(isset($i)){
-	//if($i==8){
+foreach ($functiongraphs as $fncg){
+	$pieces = explode("|", $fncg->settingString); //3つめの数字が配置位置の前のセンサーID
+	$beforID=$pieces;
+	if($beforID[2]){
+		
 ?>
+
         $(document).ready(function(){
 // DataSlider
-$("#ex_hs1").slider({});
+$("#ex_hs<?php echo $beforID[2];?>").slider({});
 			
-            var url = "{{url('stock/housa/1/2')}}";
+            <?php if($timespan == 0){?>var url = "{{url('stock/housa/<?php echo $beforID[0];?>/<?php echo $beforID[1];?>')}}";<?php } ?>
+            <?php if($timespan != 0){?>var url = "{{url('stock/housa2/'.$beforID[0].'/'.$beforID[1].'/'.$from_date.'/'.$to_date)}}";<?php } ?>
 
             var x = new Array();
             var y = new Array();
@@ -237,77 +254,10 @@ $("#ex_hs1").slider({});
 				if(valmin > data.sddvalue) valmin = data.sddvalue;
             });
 			if(arravg.length > 0) valavg = average(arravg);
-			$('#chart_hs1').html("<div class='col-md-4'>" + titlename + "　" + labelname+"</div><div class='col-md-4'>　現在:"+valcur+"　平均:"+valavg+"　</div><div class='col-md-4'><p style='font-size: 0.8em !important;'>最大:"+valmax+"　最小:"+valmin + "</p></div>");
-            //$('#chart_hs1').html(titlename);
-            var canvas_hs1 = document.getElementById("canvas_hs1");
-            var ctx_hs1 = canvas_hs1.getContext("2d");
-                var myChart_hs1 = new Chart(ctx_hs1, {
-                  type: 'scatter',
-                  data: {
-                      
-                      datasets: [{
-                          label: labelname ,
-                          data: items,
-                          borderWidth: 1,
-                          fill: false,
-                          borderColor: 'rgb(180, 80, 80)',
-                          radius: 0,
-                      }]
-                  },
-options: {
-        scales: {
-            xAxes: [{
-                type: 'time',
-                time: {
-                    unit:  <?php echo ($timespan==0)?"'hour'":"'day'";?>,
-                                    displayFormats: {
-                                        'hour': 'H:mm', 
-                                        'day': 'MM/DD', 
-                                    },
-                }
-            }],
-        }
-    }
-              });
-
-$('.panel-body').waitMe('hide');
-
-          });
-        });
-        $(document).ready(function(){
-// DataSlider
-$("#ex_hs2").slider({});
-			
-            var url = "{{url('stock/housa/7/8')}}";
-
-            var x = new Array();
-            var y = new Array();
-            var items = [];
-            var labelname = '';
-            var titlename = '';
-			var valcur = 0;
-			var valavg = 0;
-			var valmax = 0;
-			var valmin = 0;
-			var arravg = [];
-          $.get(url, function(response){
-            response.forEach(function(data){
-                items.push({x:new Date(data.sddatetime),y:data.sddvalue});
-                labelname = data.name;
-                titlename = data.shieldname + data.unitname;
-				valcur = data.sddvalue;
-				arravg.push(data.sddvalue);
-				if(valmax < data.sddvalue) valmax = data.sddvalue;
-				if(arravg.length==1) valmin = data.sddvalue;
-				if(valmin > data.sddvalue) valmin = data.sddvalue;
-            });
-			if(arravg.length > 0) valavg = average(arravg);
-			$('#chart_hs2').html("<div class='col-md-4'>" + titlename + "　" + labelname+"</div><div class='col-md-4'>　現在:"+valcur+"　平均:"+valavg+"　</div><div class='col-md-4'><p style='font-size: 0.8em !important;'>最大:"+valmax+"　最小:"+valmin + "</p></div>");
-            //$('#chart_hs2').html(titlename);
-            
-            var canvas_hs2 = document.getElementById("canvas_hs2");
-            var ctx_hs2 = canvas_hs2.getContext("2d");
-                var myChart_hs2 = new Chart(ctx_hs2, {
+			$('#chart_hs<?php echo $beforID[2];?>').html("<div class='col-md-4'>" + titlename + "　" + labelname+"</div><div class='col-md-4'>　現在:"+valcur+"　平均:"+valavg+"　</div><div class='col-md-4'><p style='font-size: 0.8em !important;'>最大:"+valmax+"　最小:"+valmin + "</p></div>");
+            var canvas_hs<?php echo $beforID[2];?> = document.getElementById("canvas_hs<?php echo $beforID[2];?>");
+            var ctx_hs<?php echo $beforID[2];?> = canvas_hs<?php echo $beforID[2];?>.getContext("2d");
+                var myChart_hs<?php echo $beforID[2];?> = new Chart(ctx_hs<?php echo $beforID[2];?>, {
                   type: 'scatter',
                   data: {
                       
@@ -341,7 +291,9 @@ $('.panel-body').waitMe('hide');
           });
         });
 <?php
-//}
+			
+		}
+	} 
 }
 ?>
 

@@ -34,9 +34,10 @@ class StockController extends Controller
 			$projectatusers = $projectatusers+$projectatusers2;
 		}
         $sensors = \DB::table('sensors')->select('id')->orderBy('id')->where('project_id','=', $projectid)->get();
+		$functiongraphs = \DB::table('settings')->select('settingName','settingString')->where('settingGroup', 'FUNCTION_GRAPH_HOUSA')->where('project_id','=', $projectid)->where('settingValue', 1)->get();
         //echo($sensors);exit();
 		$timespan = 0;
-		return view('index',compact('projectatusers', 'sensors', 'projectid', 'timespan'));
+		return view('index',compact('projectatusers', 'sensors', 'projectid', 'timespan', 'functiongraphs'));
     }
 	
     //public function changeprj(Request $projectid,$fromdate="",$todate="")	
@@ -65,8 +66,9 @@ class StockController extends Controller
 			$projectatusers = $projectatusers+$projectatusers2;
 		}
 		$sensors = \DB::table('sensors')->orderBy('address')->orderBy('id')->where('project_id','=', $projectid)->get();
+		$functiongraphs = \DB::table('settings')->select('settingName','settingString')->where('settingGroup', 'FUNCTION_GRAPH_HOUSA')->where('project_id','=', $projectid)->where('settingValue', 1)->get();
 		//echo($sensors);exit();
-		return view('index',compact('projectatusers', 'sensors', 'projectid', 'timespan'));
+		return view('index',compact('projectatusers', 'sensors', 'projectid', 'timespan', 'functiongraphs'));
     }
 
     /**
@@ -192,6 +194,43 @@ class StockController extends Controller
       {
 		$from=date('Y-m-d H-i-s' , strtotime('-1 day'));
 		$to=date('Y-m-d H-i-s');
+		$result = \DB::select("select projectatusers.name as pjname,shieldmodules.name as shieldname,sensunits.name as unitname,'飽差 g/m3' as name, 
+date_format(dst1.sddatetime,'%Y-%m-%dT%TZ') as sddatetime,data1,data2 from 
+(select sddatetime,ds1.sddvalue as data1,sensoer_id from sensdatas as ds1 where sddatetime>=? and sddatetime<=? and sensoer_id = ?) as dst1 
+inner join 
+(select sddatetime,ds2.sddvalue as data2 from sensdatas as ds2 where sddatetime>=? and sddatetime<=? and sensoer_id = ?) as dst2 on dst1.sddatetime = dst2.sddatetime 
+                    inner join sensors on sensors.id=dst1.sensoer_id
+                    inner join sensunits on sensunits.id = sensors.sensunit_id
+                    inner join shieldmodules on sensunits.shield_id = shieldmodules.id
+                    inner join projectatusers on sensors.project_id = projectatusers.id",[$from,$to,$sensorid1,$from,$to,$sensorid2]);
+		$result1=array();
+		$result2=array();
+		$housa=0.01;
+		$houwasuijoukiatsu=0.01;
+		$houwasuijoukiryou=0.01;
+		foreach($result as $row){
+			$houwasuijoukiatsu=6.1087*pow(10,(7.5*$row->data1/($row->data1+237.3)));
+			$houwasuijoukiryou=217*$houwasuijoukiatsu/($row->data1+273.15);
+			$housa=(100-$row->data2)*$houwasuijoukiryou/100;
+			$row->data3=round($housa,2);
+			$result1['pjname']=$row->pjname;
+			$result1['shieldname']=$row->shieldname;
+			$result1['unitname']=$row->unitname;
+			$result1['name']=$row->name;
+			$result1['sddatetime']=$row->sddatetime;
+			$result1['data1']=$row->data1;
+			$result1['data2']=$row->data2;
+			$result1['sddvalue']=$row->data3;
+			$result2[]=$result1;
+		}
+		return response()->json($result2);
+      }
+	  
+      public function housa2($sensorid1=1,$sensorid2=2,$from="2018-07-14",$to="2018-07-15")
+      {
+        //JST 9時間引く  selectは　逆に足す
+        $from = date("Y-m-d H:i:s",strtotime($from." 0:00:00"));
+        $to = date("Y-m-d H:i:s",strtotime($to." 0:00:00"." +24 hour"));
 		$result = \DB::select("select projectatusers.name as pjname,shieldmodules.name as shieldname,sensunits.name as unitname,'飽差 g/m3' as name, 
 date_format(dst1.sddatetime,'%Y-%m-%dT%TZ') as sddatetime,data1,data2 from 
 (select sddatetime,ds1.sddvalue as data1,sensoer_id from sensdatas as ds1 where sddatetime>=? and sddatetime<=? and sensoer_id = ?) as dst1 

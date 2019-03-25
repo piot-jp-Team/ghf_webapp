@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth', 'isVerified']], function () {
 	Route::get('stock/chart/{sensorid}','StockController@chart');
 	Route::get('stock/chart2/{sensorid}/{fromdate}/{todate}','StockController@chart2');
 	Route::get('stock/housa/{sensorid1}/{sensorid2}','StockController@housa');
+	Route::get('stock/housa2/{sensorid1}/{sensorid2}/{fromdate}/{todate}','StockController@housa2');
 	Route::get('/settings','SettingController@index')->name('settings');
 	Route::get('sensdata/chart','SensdataController@chart');
 	Route::get('sensdata/onesenserdata/{snsid}','SensdataController@onesenserdata')->name('sensdata');

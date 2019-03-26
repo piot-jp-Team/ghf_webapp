@@ -229,7 +229,7 @@ foreach ($functiongraphs as $fncg){
 // DataSlider
 $("#ex_hs<?php echo $beforID[2];?>").slider({});
 			
-            <?php if($timespan == 0){?>var url = "{{url('stock/housa/<?php echo $beforID[0];?>/<?php echo $beforID[1];?>')}}";<?php } ?>
+            <?php if($timespan == 0){?>var url = "{{url('stock/housa/'.$beforID[0].'/'.$beforID[1])}}";<?php } ?>
             <?php if($timespan != 0){?>var url = "{{url('stock/housa2/'.$beforID[0].'/'.$beforID[1].'/'.$from_date.'/'.$to_date)}}";<?php } ?>
 
             var x = new Array();

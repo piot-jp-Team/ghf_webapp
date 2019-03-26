@@ -50,6 +50,12 @@ class SendAlertMailService
         $targetTime = new Datetime($target);
         return ($baseTime->getTimestamp() - $targetTime->getTimestamp()) / 60;
     }
+    /**
+     * 設定テーブルをプロジェクトIDで取得する。
+     *
+     * @param integer $projectId
+     * @return Collection
+     */
     public function getSettingsByProjectId(int $projectId):Collection
     {
         return $this->setting->where('project_id',$projectId)->where('settingName','ALERT_EMAIL')->get();

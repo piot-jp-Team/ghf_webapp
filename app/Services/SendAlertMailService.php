@@ -58,7 +58,7 @@ class SendAlertMailService
      */
     public function getSettingsByProjectId(int $projectId):Collection
     {
-        return $this->setting->where('project_id',$projectId)->where('settingName','ALERT_EMAIL')->get();
+        return $this->setting->where('project_id',$projectId)->where('settingGroup','ALERT_EMAIL')->get();
     }
 
 }

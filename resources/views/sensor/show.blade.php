@@ -57,6 +57,19 @@
 								</div>
 								
 								<div class="form-group">
+									 <label for="body">アラート上限</label>
+									 <p class="form-control-static">{{$sensor->limitupper}}</p>
+								</div>
+								<div class="form-group">
+									 <label for="body">アラート下限</label>
+									 <p class="form-control-static">{{$sensor->limitunder}}</p>
+								</div>		
+								<div class="form-group">
+									 <label for="body">アラートモード</label>
+									 <p class="form-control-static">{{$sensor->alertmode}}</p>
+								</div>							
+
+								<div class="form-group">
 									<label for="nome">SENSUNIT_ID</label>
 									<p class="form-control-static">{{$sensor->sensunit_id}} {{ $sensor->sensunit->name }}</p>
 								</div>

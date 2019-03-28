@@ -107,7 +107,7 @@
                                         {{ __('ホーム') }}
                                     </a>
 	                                <a class="dropdown-item" href="{{ route('settings') }}">
-                                        {{ __('設定') }}
+                                        {{ __('システム設定') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

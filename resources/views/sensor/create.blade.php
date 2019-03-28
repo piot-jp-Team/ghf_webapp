@@ -69,6 +69,28 @@
                         <span class="help-block">{{ $errors->first("yscalemin") }}</span>
                        @endif
                     </div>
+
+					<div class="form-group @if($errors->has('limitupper')) has-error @endif">
+                       <label for="limitupper-field">limitupper</label>
+                    <input type="text"  class="form-control" id="limitupper-field" rows="3" name="limitupper" value="{{ old("limitupper") }}"/>
+                       @if($errors->has("limitupper"))
+                        <span class="help-block">{{ $errors->first("limitupper") }}</span>
+                       @endif
+                    </div>
+					<div class="form-group @if($errors->has('limitunder')) has-error @endif">
+                       <label for="limitunder-field">limitunder</label>
+                    <input type="text"  class="form-control" id="limitunder-field" rows="3" name="limitunder" value="{{ old("limitunder") }}"/>
+                       @if($errors->has("limitunder"))
+                        <span class="help-block">{{ $errors->first("limitunder") }}</span>
+                       @endif
+                    </div>
+					<div class="form-group @if($errors->has('alertmode')) has-error @endif">
+                       <label for="alertmode-field">alertmode</label>
+                    <input type="text"  class="form-control" id="alertmode-field" rows="3" name="alertmode" value="{{ old("alertmode") }}"/>
+                       @if($errors->has("alertmode"))
+                        <span class="help-block">{{ $errors->first("alertmode") }}</span>
+                       @endif
+                    </div>
 				
 					<div class="form-group @if($errors->has('sensunit_id')) has-error @endif">
                        <label for="sensunit_id-field">sensunit_id</label>

@@ -44,7 +44,7 @@
                     </div>
 
 					<div class="form-group @if($errors->has('ctgain')) has-error @endif">
-                       <label for="ctgain-field">ctgain</label>
+                       <label for="ctgain-field">ゲイン</label>
                     <input type="text"  class="form-control" id="ctgain-field" rows="3" name="ctgain" value="{{ is_null(old("ctgain")) ? $sensor->ctgain : old("ctgain") }}"/>
                        @if($errors->has("ctgain"))
                         <span class="help-block">{{ $errors->first("ctgain") }}</span>
@@ -52,27 +52,46 @@
                     </div>
 
 					<div class="form-group @if($errors->has('ctoffset')) has-error @endif">
-                       <label for="ctoffset-field">ctoffset</label>
+                       <label for="ctoffset-field">オフセット</label>
                     <input type="text"  class="form-control" id="ctoffset-field" rows="3" name="ctoffset" value="{{ is_null(old("ctoffset")) ? $sensor->ctoffset : old("ctoffset") }}"/>
                        @if($errors->has("ctoffset"))
                         <span class="help-block">{{ $errors->first("ctoffset") }}</span>
                        @endif
                     </div>
 					<div class="form-group @if($errors->has('yscalemax')) has-error @endif">
-                       <label for="yscalemax-field">yscalemax</label>
+                       <label for="yscalemax-field">グラフ上限</label>
                     <input type="text"  class="form-control" id="yscalemax-field" rows="3" name="yscalemax" value="{{ is_null(old("yscalemax")) ? $sensor->yscalemax : old("yscalemax") }}"/>
                        @if($errors->has("yscalemax"))
                         <span class="help-block">{{ $errors->first("yscalemax") }}</span>
                        @endif
                     </div>
 					<div class="form-group @if($errors->has('yscalemin')) has-error @endif">
-                       <label for="yscalemin-field">yscalemin</label>
+                       <label for="yscalemin-field">グラフ下限</label>
                     <input type="text"  class="form-control" id="yscalemin-field" rows="3" name="yscalemin" value="{{ is_null(old("yscalemin")) ? $sensor->yscalemin : old("yscalemin") }}"/>
                        @if($errors->has("yscalemin"))
                         <span class="help-block">{{ $errors->first("yscalemin") }}</span>
                        @endif
                     </div>
 				
+					<div class="form-group @if($errors->has('limitupper')) has-error @endif">
+                       <label for="limitupper-field">アラート上限</label>
+                    <input type="text"  class="form-control" id="limitupper-field" rows="3" name="limitupper" value="{{ is_null(old("limitupper")) ? $sensor->limitupper : old("limitupper") }}"/>
+                       @if($errors->has("limitupper"))
+                        <span class="help-block">{{ $errors->first("limitupper") }}</span>
+                       @endif
+                    </div>
+					<div class="form-group @if($errors->has('limitunder')) has-error @endif">
+                       <label for="limitunder-field">アラート下限</label>
+                    <input type="text"  class="form-control" id="limitunder-field" rows="3" name="limitunder" value="{{ is_null(old("limitunder")) ? $sensor->limitunder : old("limitunder") }}"/>
+                       @if($errors->has("limitunder"))
+                        <span class="help-block">{{ $errors->first("limitunder") }}</span>
+                       @endif
+                    </div>
+					<div class="form-group @if($errors->has('alertmode')) has-error @endif">
+                       <label for="alertmode-field">アラートモード</label>
+					   {{Form::select('alertmode', ['無効', '有効'],is_null(old("alertmode")) ? $sensor->alertmode : old("alertmode"),['class' => 'form-control','id' => 'alertmode-field'] )}}
+                    </div>
+								
 					<div class="form-group @if($errors->has('sensunit_id')) has-error @endif">
                        <label for="sensunit_id-field">sensunit_id</label>
 						{{-- セレクトボックス --}}

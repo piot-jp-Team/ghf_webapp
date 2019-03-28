@@ -53,6 +53,9 @@ class SensorController extends Controller
             $sensor->ctoffset = $request->input("ctoffset");
 			$sensor->yscalemax = $request->input("yscalemax");
 			$sensor->yscalemin = $request->input("yscalemin");
+            $sensor->limitupper = $request->input("limitupper");
+			$sensor->limitunder = $request->input("limitunder");
+			$sensor->alertmode = $request->input("alertmode");
             $sensor->sensunit_id = $request->input("sensunit_id");
             $sensor->project_id = $request->input("project_id");
 			$sensor->save();
@@ -107,6 +110,9 @@ class SensorController extends Controller
 		$sensor->ctgain = $request->input("ctgain");
 		$sensor->yscalemax = $request->input("yscalemax");
 		$sensor->yscalemin = $request->input("yscalemin");
+        $sensor->limitupper = $request->input("limitupper");
+		$sensor->limitunder = $request->input("limitunder");
+		$sensor->alertmode = $request->input("alertmode");
 		$sensor->project_id = $request->input("project_id");
 		$sensor->save();
 		return redirect()->route('sensor.index')->with('message', 'Item created successfully.');

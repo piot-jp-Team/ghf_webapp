@@ -31,6 +31,9 @@
 											<th>ctoffset </th>
 											<th>yscalemax </th>
 											<th>yscalemin </th>
+											<th>アラート上限 </th>
+											<th>アラート下限 </th>
+											<th>アラートモード </th>
 											<th>created_at </th>
 											<th>updated_at</th>
 											<th></th>
@@ -51,6 +54,9 @@
 												<td>{{$sensor->ctoffset}}</td>
 												<td>{{$sensor->yscalemax}}</td>
 												<td>{{$sensor->yscalemin}}</td>
+												<td>{{$sensor->limitupper}}</td>
+												<td>{{$sensor->limitunder}}</td>
+												<td>{{$sensor->alertmode}}</td>
 												<td>{{$sensor->created_at}}</td>
 												<td>{{$sensor->updated_at}}</td>
 												<td class="text-right">

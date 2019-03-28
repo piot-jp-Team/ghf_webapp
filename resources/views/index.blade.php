@@ -59,6 +59,7 @@ echo "</select>";
                    <div class="panel-heading statistics row" id="chart<?php echo $i; ?>" ><b>Chart<?php echo $i; ?></b></div>
                    <div class="panel-body">
                        <canvas id="canvas<?php echo $i; ?>" height="280" width="600"></canvas>
+					   <a class="btn btn-info pull-right btn-lg" href="{{ route('sensor.edit', $i) }}"><i class="glyphicon glyphicon-cog"></i></a>
                    </div>
                </div>
 <?php

@@ -35,7 +35,9 @@ class SendAlertMailService
      */
     public function getLatestSentTime(int $sensorId):string
     {
-        return $this->alertQue->where('sensor_id',$sensorId)->where('sendflg',1)->max('sendingtime');
+		$beftime = $this->alertQue->where('sensor_id',$sensorId)->where('sendflg',1)->max('sendingtime');
+		if(is_null($beftime)) $beftime = date("Y-m-d H:i:s",strtotime("-1 day"));
+        return $beftime;
     }
     /**
      * 時刻を比較して差分となる分を返却する。

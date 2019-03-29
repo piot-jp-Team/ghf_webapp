@@ -7,6 +7,7 @@ use App\Services\SendAlertMailService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AlertMail;
+use App\Sensdata;
 
 class SendAlertMail extends Command
 {
@@ -49,6 +50,9 @@ class SendAlertMail extends Command
      */
     public function handle()
     {
+		//alertqueテーブルにデータ入れる
+		Sensdata::alertqueinject();
+		
         $unsentRecords = $this->sendMailService->getUnsentRecord();
         foreach ($unsentRecords as $unsent){
             $latestTime = $this->sendMailService->getLatestSentTime($unsent->sensor_id);

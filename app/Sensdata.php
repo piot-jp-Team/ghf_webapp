@@ -24,4 +24,17 @@ class Sensdata extends Model
         return DB::select($sql);
     }
 	
+	public static function alertqueinject() {	
+		$sql="insert into alertques ("
+		. "sensdata_id,sensor_id,sddvalue,limitupper,limitunder,sendflg,project_id,sendingtime,created_at,updated_at"
+		. ") select "
+		. "sd.id,ss.id,sddvalue,limitupper,limitunder,0,sd.project_id,sd.created_at,now(),now() "
+		. "from sensdatas sd left join sensors ss on ss.id=sd.sensoer_id where "
+		. "sd.created_at > NOW() - INTERVAL 30 minute "
+		. "and ss.alertmode=1 and limitupper<>limitunder and limitupper>limitunder "
+		. "and (sddvalue > limitupper or sddvalue < limitunder) "
+		. "and sd.id > (select ifnull(max(sensdata_id),0) from alertques);";
+        return DB::insert($sql);
+    }
+	
 }

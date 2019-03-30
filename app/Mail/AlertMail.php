@@ -36,7 +36,7 @@ class AlertMail extends Mailable
      */
     public function build()
     {
-        return $this->from('alert@example.com')
+        return $this->from(env("MAIL_FROM_ADDRESS"))
         ->subject('アラートメール')
         ->view('emails.alert')
         ->with(['sensorName'=> $this->sensorName,

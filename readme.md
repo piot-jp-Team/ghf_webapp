@@ -10,7 +10,7 @@
 iot通信モジュールへRS485で取得データを送ります。
 sakura.io + arduino UNO
 sakura.ioから、laravel製のグラフで表示します。（これです！）  
-sakura.ioゲートウエイとのwss送受信は下記
+sakura.ioゲートウエイとのwss送受信は下記  
 https://github.com/piot-jp-Team/ghf_sakuraIO_wss_client
 
 今後はsigfox,lorawanも利用したいと思います。

@@ -35,6 +35,6 @@ https://github.com/piot-jp-Team/ghf_sensorhousing
 
 ## 開発ツール
 - 筐体設計 OpenSCAD, FreeCAD
-- PCB設計 Eagle6.6
+- PCB設計 Eagle6.6 KiCAD4.0.1-JP
 - ファームウエア arduino IDE1.8.5
 - エディタはATOM, PlantUML, Netbeans etc.

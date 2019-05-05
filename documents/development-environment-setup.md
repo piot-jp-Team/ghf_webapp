@@ -97,14 +97,14 @@ ghf_webapp アプリケーションのトップフォルダの .env.example を�
 
 データベースの設定、メールサーバーの設定、.env の修正までが終了したら、いくつか artisan を使った設定をしておく必要があります。
 
-## 暗号化キーの設定
+### 暗号化キーの設定
 
 ```
 $ php artisan key:generate
 Application key [base64:********************************************] set successfully.
 ```
 
-## マイグレーションの実行
+### マイグレーションの実行
 
 ghf_webapp では Laravel アプリの通常のマイグレーション、プラスもう一つ vendor 系のマイグレーションを実行する必要があるので注意してください。
 
@@ -116,7 +116,7 @@ Migrating: 2016_09_13_070520_add_verification_to_user_table
 Migrated:  2016_09_13_070520_add_verification_to_user_table
 ```
 
-## シーダーの実行
+### シーダーの実行
 ```
 $ php artisan db:seed
 Seeding: SensorsTableSeeder

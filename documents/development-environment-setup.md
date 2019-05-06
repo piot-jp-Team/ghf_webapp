@@ -146,3 +146,30 @@ Seeding: ProjectatusersTableSeeder
 ![登録済み画面](images/development-environment-setup/ghf-webapp-5th.png)
 
 
+# テスト用データの作成
+
+ghf_webapp の表示が正しく行われているかチェックするため、TestDataSeeder クラスを作成しました。  
+以下の条件でテスト用データを作成します。  
+データベースはこのテストデータで汚染されます。テスト用として使用してください。
+
+## テスト用データ概要
+
+- ユーザ名 : test_user
+- メールアドレス : test_user@test.com
+- パスワード : test_user
+- プロジェクト名 : テストプロジェクト
+- モジュール名：テストモジュール X 号機
+- ユニット名：テストセンサーユニット X 号機
+- センサー名：温度
+- センサー値： TestDataSeeder 実行日の1年前の日から実行日までの1時間毎
+- 統計情報名：テストプロジェクト温度統計
+- 統計する期間：TestDataSeeder 実行日の一月前から実行日まで
+
+## テスト用データ作成コマンド
+
+	$ php artisan db:seed --class=TestDataSeeder
+
+## テスト用データの表示例
+
+![グラフ表示例1年](images/development-environment-setup/ghf-webapp-testdata.png)
+

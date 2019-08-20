@@ -9,7 +9,7 @@
         "doctrine/dbal": "^2.7",
         "encore/laravel-admin": "1.5.*",
         "fideloper/proxy": "^4.0",
-        "jrean/laravel-user-verification": "dev-master",
+        "jrean/laravel-user-verification": "6.*",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.6",
